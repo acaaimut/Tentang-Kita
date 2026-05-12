@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tentang Kita — Coffee & Stories</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream: #f5efe6;
+      --warm-white: #faf7f2;
+      --brown-dark: #2c1a0e;
+      --brown-mid: #5c3d2e;
+      --brown-light: #a07850;
+      --gold: #c9a96e;
+      --rose: #d4a5a5;
+      --text: #2c1a0e;
+      --muted: #8a7060;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--warm-white);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 4rem;
+      background: rgba(250, 247, 242, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(192, 160, 110, 0.2);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--brown-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-logo span { color: var(--gold); font-style: italic; }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brown-mid);
+      font-weight: 400;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--brown-dark);
+      color: var(--cream) !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 2px;
+    }
+
+    .nav-cta:hover { background: var(--brown-mid); color: var(--cream) !important; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 4rem 6rem 6rem;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      line-height: 1.1;
+      color: var(--brown-dark);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.5s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--brown-light);
+    }
+
+    .hero-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 400px;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.7s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.9s forwards;
+    }
+
+    .btn-primary {
+      background: var(--brown-dark);
+      color: var(--cream);
+      padding: 1rem 2.2rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'DM Sans', sans-serif;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--brown-mid);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      color: var(--brown-mid);
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 1px solid var(--gold);
+      padding-bottom: 2px;
+      transition: color 0.3s;
+    }
+
+    .btn-ghost:hover { color: var(--gold); }
+
+    .hero-right {
+      position: relative;
+      background: var(--brown-dark);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-img-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2c1a0e 0%, #5c3d2e 40%, #a07850 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeIn 1.2s ease 0.4s forwards;
+    }
+
+    .coffee-art {
+      font-size: 8rem;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .hero-badge {
+      position: absolute;
+      bottom: 3rem;
+      left: -2rem;
+      background: var(--cream);
+      padding: 1.4rem 1.8rem;
+      border-left: 3px solid var(--gold);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      opacity: 0;
+      animation: slideRight 0.9s ease 1s forwards;
+    }
+
+    .hero-badge strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--brown-dark);
+    }
+
+    .hero-badge span {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-strip {
+      background: var(--brown-dark);
+      padding: 1rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-inner {
+      display: inline-flex;
+      gap: 0;
+      animation: marquee 25s linear infinite;
+    }
+
+    .marquee-item {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--gold);
+      padding: 0 2.5rem;
+      letter-spacing: 0.08em;
+    }
+
+    .marquee-dot {
+      color: var(--brown-light);
+      font-size: 0.5rem;
+      line-height: 1.5;
+    }
+
+    /* ── ABOUT ── */
+    #tentang {
+      padding: 8rem 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      color: var(--brown-dark);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-img {
+      position: relative;
+    }
+
+    .about-img-main {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: linear-gradient(160deg, #5c3d2e, #2c1a0e);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7rem;
+    }
+
+    .about-img-accent {
+      position: absolute;
+      bottom: -2rem;
+      right: -2rem;
+      width: 55%;
+      aspect-ratio: 1;
+      background: var(--cream);
+      border: 1px solid rgba(201,169,110,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.4rem;
+      padding: 1.5rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    }
+
+    .about-img-accent strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--brown-dark);
+    }
+
+    .about-img-accent span {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ── MENU ── */
+    #menu {
+      padding: 8rem 6rem;
+      background: var(--brown-dark);
+      color: var(--cream);
+    }
+
+    #menu .section-title { color: var(--cream); }
+    #menu .section-body { color: rgba(245,239,230,0.6); }
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+    }
+
+    .menu-card {
+      background: rgba(255,255,255,0.04);
+      padding: 2.5rem 2rem;
+      border: 1px solid rgba(201,169,110,0.1);
+      cursor: pointer;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,169,110,0.08), transparent);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+
+    .menu-card:hover { transform: translateY(-4px); border-color: rgba(201,169,110,0.3); }
+    .menu-card:hover::before { opacity: 1; }
+
+    .menu-emoji { font-size: 3rem; margin-bottom: 1.2rem; display: block; }
+
+    .menu-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-desc {
+      font-size: 0.85rem;
+      color: rgba(245,239,230,0.5);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .menu-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* ── ATMOSPHERE ── */
+    #atmosphere {
+      padding: 8rem 6rem;
+      text-align: center;
+    }
+
+    .atm-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 4rem;
+    }
+
+    .atm-item {
+      aspect-ratio: 3/4;
+      background: linear-gradient(160deg, #c9a96e22, #5c3d2e44);
+      border: 1px solid rgba(201,169,110,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+      border-radius: 2px;
+    }
+
+    .atm-item:nth-child(2) { margin-top: 2rem; }
+    .atm-item:nth-child(4) { margin-top: -2rem; }
+    .atm-item:hover { transform: scale(1.03); }
+
+    /* ── TESTIMONIAL ── */
+    #cerita {
+      padding: 8rem 6rem;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cerita::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 30rem;
+      position: absolute;
+      top: -5rem;
+      left: -2rem;
+      color: rgba(201,169,110,0.08);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .testi-card {
+      background: var(--warm-white);
+      padding: 2.5rem;
+      border-top: 2px solid var(--gold);
+    }
+
+    .testi-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      color: var(--brown-mid);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .testi-author {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .testi-author strong {
+      display: block;
+      color: var(--brown-dark);
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      letter-spacing: 0;
+      text-transform: none;
+      margin-bottom: 0.2rem;
+    }
+
+    .stars { color: var(--gold); margin-bottom: 1rem; font-size: 0.85rem; }
+
+    /* ── VISIT ── */
+    #kunjungi {
+      padding: 8rem 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .info-block { margin-bottom: 2.5rem; }
+
+    .info-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--brown-mid);
+      line-height: 1.7;
+    }
+
+    .map-placeholder {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #2c1a0e, #a07850);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      border-radius: 2px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--brown-dark);
+      color: var(--cream);
+      padding: 4rem 6rem 2.5rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid rgba(201,169,110,0.15);
+      margin-bottom: 2rem;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-logo span { color: var(--gold); font-style: italic; }
+
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: rgba(245,239,230,0.5);
+      font-style: italic;
+    }
+
+    .footer-links h4 {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .footer-links ul { list-style: none; }
+
+    .footer-links li { margin-bottom: 0.6rem; }
+
+    .footer-links a {
+      color: rgba(245,239,230,0.5);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: rgba(245,239,230,0.3);
+    }
+
+    .social-links { display: flex; gap: 1rem; }
+
+    .social-link {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,169,110,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(245,239,230,0.5);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: all 0.3s;
+    }
+
+    .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes slideRight {
+      from { opacity: 0; transform: translateX(-30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 3rem 1.5rem; }
+      .hero-right { height: 50vw; }
+      #tentang, #kunjungi { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
+      #menu, #atmosphere, #cerita { padding: 4rem 1.5rem; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .atm-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials { grid-template-columns: 1fr; }
+      footer { padding: 3rem 1.5rem 2rem; }
+      .footer-top { flex-direction: column; gap: 2rem; }
+      .menu-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Tentang <span>Kita</span></div>
+  <ul class="nav-links">
+    <li><a href="#tentang">Tentang</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#atmosphere">Suasana</a></li>
+    <li><a href="#cerita">Cerita</a></li>
+    <li><a href="#kunjungi" class="nav-cta">Kunjungi</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">☕ Sejak 2019 · Solo, Jawa Tengah</p>
+    <h1 class="hero-title">
+      Di sini,<br>
+      setiap tegukan<br>
+      <em>bercerita.</em>
+    </h1>
+    <p class="hero-desc">
+      Tentang Kita bukan sekadar kafe. Ini adalah ruang untuk duduk, 
+      merenung, dan merasakan kehangatan dalam setiap cangkir yang kami seduh dengan hati.
+    </p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn-primary">Lihat Menu</a>
+      <a href="#tentang" class="btn-ghost">Kenali Kami →</a>
+    </div>
+    <div class="hero-badge">
+      <strong>4.9 ★</strong>
+      <span>Dari 2.000+ ulasan pelanggan</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-placeholder">
+      <div class="coffee-art">☕</div>
+      <p style="font-family:'Cormorant Garamond',serif; color:rgba(245,239,230,0.5); font-style:italic; font-size:1rem;">
+        "Setiap saat adalah saat yang tepat untuk kopi."
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="marquee-item">Single Origin</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Specialty Coffee</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Pour Over</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Cold Brew</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Latte Art</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Suasana Nyaman</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Wi-Fi Gratis</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Live Acoustic</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Single Origin</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Specialty Coffee</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Pour Over</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Cold Brew</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Latte Art</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Suasana Nyaman</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Wi-Fi Gratis</span><span class="marquee-dot">•</span>
+    <span class="marquee-item">Live Acoustic</span><span class="marquee-dot">•</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="tentang">
+  <div class="about-img reveal">
+    <div class="about-img-main">🫘</div>
+    <div class="about-img-accent">
+      <strong>5+</strong>
+      <span>Tahun meracik cerita dalam secangkir kopi</span>
+    </div>
+  </div>
+  <div class="reveal">
+    <p class="section-label">✦ Tentang Kami</p>
+    <h2 class="section-title">Kopi yang lahir dari cinta, diseduh dengan makna.</h2>
+    <p class="section-body">
+      Tentang Kita hadir sebagai jawaban atas kerinduan akan ruang yang hangat — 
+      tempat di mana percakapan mengalir bebas, dan waktu terasa lebih lambat.
+    </p>
+    <p class="section-body">
+      Biji kopi kami dipilih langsung dari petani lokal Jawa, Toraja, dan Flores. 
+      Setiap metode penyeduhan kami perlakukan sebagai sebuah ritual, bukan sekadar rutinitas.
+    </p>
+    <a href="#kunjungi" class="btn-primary">Temukan Kami</a>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-header reveal">
+    <div>
+      <p class="section-label">✦ Menu Pilihan</p>
+      <h2 class="section-title">Apa yang ingin<br>kamu rasakan hari ini?</h2>
+    </div>
+    <a href="#kunjungi" class="btn-ghost" style="color:rgba(245,239,230,0.6); border-color:rgba(201,169,110,0.4);">Lihat semua →</a>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-card reveal">
+      <span class="menu-emoji">☕</span>
+      <h3 class="menu-name">Kopi Kita</h3>
+      <p class="menu-desc">Espresso bold dengan sentuhan karamel alami dari biji Jawa Tengah pilihan.</p>
+      <span class="menu-price">Rp 28.000</span>
+    </div>
+    <div class="menu-card reveal">
+      <span class="menu-emoji">🥛</span>
+      <h3 class="menu-name">Susu Hangat Kita</h3>
+      <p class="menu-desc">Latte creamy dengan foam tebal, cocok untuk kamu yang ingin sesuatu yang lembut.</p>
+      <span class="menu-price">Rp 32.000</span>
+    </div>
+    <div class="menu-card reveal">
+      <span class="menu-emoji">🧊</span>
+      <h3 class="menu-name">Cold Brew Kita</h3>
+      <p class="menu-desc">Diseduh 18 jam dalam dingin, menghasilkan cita rasa pekat dan smooth.</p>
+      <span class="menu-price">Rp 35.000</span>
+    </div>
+    <div class="menu-card reveal">
+      <span class="menu-emoji">🍵</span>
+      <h3 class="menu-name">Matcha Kita</h3>
+      <p class="menu-desc">Matcha grade premium dari Jepang, dipasangkan dengan susu oat lokal.</p>
+      <span class="menu-price">Rp 38.000</span>
+    </div>
+    <div class="menu-card reveal">
+      <span class="menu-emoji">🧁</span>
+      <h3 class="menu-name">Croissant Mentega</h3>
+      <p class="menu-desc">Dipanggang segar tiap pagi, renyah di luar dan lembut di dalam.</p>
+      <span class="menu-price">Rp 22.000</span>
+    </div>
+    <div class="menu-card reveal">
+      <span class="menu-emoji">🍰</span>
+      <h3 class="menu-name">Tiramisu Kita</h3>
+      <p class="menu-desc">Resep rumahan dengan kopi espresso dan mascarpone premium tanpa pembakar.</p>
+      <span class="menu-price">Rp 42.000</span>
+    </div>
+  </div>
+</section>
+
+<!-- ATMOSPHERE -->
+<section id="atmosphere">
+  <div class="reveal">
+    <p class="section-label">✦ Suasana</p>
+    <h2 class="section-title">Ruang yang dirancang<br>untuk kamu betah.</h2>
+  </div>
+  <div class="atm-grid">
+    <div class="atm-item reveal">🪑</div>
+    <div class="atm-item reveal">📚</div>
+    <div class="atm-item reveal">🎸</div>
+    <div class="atm-item reveal">🌿</div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section id="cerita">
+  <div class="reveal">
+    <p class="section-label">✦ Kata Mereka</p>
+    <h2 class="section-title">Cerita dari mereka yang<br>sudah menjadi bagian kita.</h2>
+  </div>
+  <div class="testimonials">
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Bukan hanya kopinya yang enak, tapi atmosfernya bikin aku nggak mau pulang. Sudah lebih dari 50 kali ke sini."</p>
+      <div class="testi-author"><strong>Nadia Putri</strong> Pelanggan Setia · Solo</div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Tempat paling cocok buat kerja remote. Kopi enak, musik pas, dan sinyal Wi-Fi kencang. Wajib balik lagi!"</p>
+      <div class="testi-author"><strong>Rizal Ardiansyah</strong> Freelancer · Yogyakarta</div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">"Cold brew-nya luar biasa. Kami selalu bawa tamu dari luar kota ke sini sebagai kafe pertama yang dikunjungi."</p>
+      <div class="testi-author"><strong>Sarah Oktaviani</strong> Blogger Kuliner · Jakarta</div>
+    </div>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section id="kunjungi">
+  <div class="reveal">
+    <p class="section-label">✦ Kunjungi Kami</p>
+    <h2 class="section-title">Kami tunggu kamu di sini.</h2>
+    <div class="info-block" style="margin-top:2rem">
+      <p class="info-label">📍 Alamat</p>
+      <p class="info-value">Jl. Slamet Riyadi No. 88, Laweyan,<br>Surakarta, Jawa Tengah 57141</p>
+    </div>
+    <div class="info-block">
+      <p class="info-label">🕐 Jam Buka</p>
+      <p class="info-value">Senin – Jumat: 07.00 – 22.00<br>Sabtu – Minggu: 08.00 – 23.00</p>
+    </div>
+    <div class="info-block">
+      <p class="info-label">📞 Hubungi Kami</p>
+      <p class="info-value">+62 812 3456 7890<br>halo@tentangkita.id</p>
+    </div>
+    <div class="info-block">
+      <p class="info-label">📱 Sosial Media</p>
+      <p class="info-value">@tentangkita.coffee</p>
+    </div>
+    <a href="tel:+6281234567890" class="btn-primary" style="margin-top:1rem">Reservasi Sekarang</a>
+  </div>
+  <div class="reveal">
+    <div class="map-placeholder">🗺️</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">Tentang <span>Kita</span></div>
+      <p class="footer-tagline">"Setiap cangkir adalah cerita yang menunggu untuk dibagi."</p>
+    </div>
+    <div style="display:flex;gap:4rem;">
+      <div class="footer-links">
+        <h4>Halaman</h4>
+        <ul>
+          <li><a href="#tentang">Tentang</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#atmosphere">Suasana</a></li>
+          <li><a href="#cerita">Cerita</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="#">Reservasi</a></li>
+          <li><a href="#">Karir</a></li>
+          <li><a href="#">Franchise</a></li>
+          <li><a href="#">Kontak</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Tentang Kita Coffee. Dibuat dengan ☕ di Solo.</p>
+    <div class="social-links">
+      <a href="#" class="social-link">IG</a>
+      <a href="#" class="social-link">TK</a>
+      <a href="#" class="social-link">FB</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.boxShadow = window.scrollY > 50 ? '0 4px 30px rgba(44,26,14,0.08)' : 'none';
+  });
+</script>
+
+</body>
+</html>
